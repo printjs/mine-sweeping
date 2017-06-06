@@ -1,0 +1,14 @@
+{
+  "name": "mine_clearance",
+  "version": "1.0.0",
+  "description": "mine_clearance_ts",
+  "main": "none",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wjt",
+  "license": "ISC",
+  "devDependencies": {
+    "requirejs": "^2.3.3"
+  }
+}

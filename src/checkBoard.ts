@@ -7,114 +7,85 @@
  * forty 四十个雷 棋盘大小16X16
  * ninetyNine 九十九个雷 棋盘大小30X16
  */
-interface checkBoardInterface{
-  
-}
-
-class Checkerboard{
+export class Checkerboard{
   public checkBoard:Array<Array<number>>;
   private initObj:object;
 
   constructor(type:string){ 
+    this.checkBoard = new Array<Array<number>>();
     this.initObj = {
       "ten":(x:number = 8,y:number = 8):void => {
-        this.checkBoard = this.initCheckBoard(x,y,this.createMine(x,y,10));
+        this.initCheckBoard(x,y,this.createMine(x,y,10));
       },
       "forty":(x:number = 16,y:number = 16):void => {
-        this.checkBoard = this.initCheckBoard(x,y,this.createMine(x,y,40));
+        this.initCheckBoard(x,y,this.createMine(x,y,40));
       },
       "ninetyNine":(x:number = 30,y:number = 16):void => {
-        this.checkBoard = this.initCheckBoard(x,y,this.createMine(x,y,99));
+        this.initCheckBoard(x,y,this.createMine(x,y,99));
       }
     }
     this.initObj[type]();
   }
 
-  private initCheckBoard = (x:number,y:number,mine:object):Array<Array<number>> =>{
-    let temp:any = [];
+  private initCheckBoard = (x:number,y:number,mine:object) =>{
     for(let i = 0;i<x;i++){
-      let xTemp:Array<number> = [];
+      this.checkBoard[i] = new Array<number>();
       for(let j = 0;j<y;j++){
-        xTemp.push(0);
+        this.checkBoard[i][j] = 0;
       }
-      temp.push(xTemp);
     }
-    console.log(temp);
     for(let $index in mine){
-      let arr:Array<any> = [
-        (()=>{
-          if(temp[mine[$index].x-1]){
-            return typeof temp[mine[$index].x-1][mine[$index].y-1] == "undefined"?null:temp[mine[$index].x-1][mine[$index].y-1]
-          }else{
-            return null;
-          }
-        })(),
-        (()=>{
-          if(temp[mine[$index].x-1]){
-            return typeof temp[mine[$index].x-1][mine[$index].y] == "undefined"?null:temp[mine[$index].x-1][mine[$index].y-1]
-          }else{
-            return null;
-          }
-        })(),  
-        (()=>{
-          if(temp[mine[$index].x-1]){
-            return typeof temp[mine[$index].x-1][mine[$index].y+1] == "undefined"?null:temp[mine[$index].x-1][mine[$index].y-1]
-          }else{
-            return null;
-          }
-        })(), 
-        (()=>{
-          if(temp[mine[$index].x]){
-            return typeof temp[mine[$index].x][mine[$index].y-1] == "undefined"?null:temp[mine[$index].x][mine[$index].y-1]
-          }else{
-            return null;
-          }
-        })(), 
-        (()=>{
-          if(temp[mine[$index].x]){
-            return typeof temp[mine[$index].x][mine[$index].y+1] == "undefined"?null:temp[mine[$index].x][mine[$index].y+1]
-          }else{
-            return null;
-          }
-        })(),  
-        (()=>{
-          if(temp[mine[$index].x+1]){
-            return typeof temp[mine[$index].x+1][mine[$index].y-1] == "undefined"?null:temp[mine[$index].x+1][mine[$index].y-1]
-          }else{
-            return null;
-          }
-        })(), 
-        (()=>{
-          if(temp[mine[$index].x+1]){
-            return typeof temp[mine[$index].x+1][mine[$index].y] == "undefined"?null:temp[mine[$index].x+1][mine[$index].y]
-          }else{
-            return null;
-          }
-        })(),  
-        (()=>{
-          if(temp[mine[$index].x+1]){
-            return typeof temp[mine[$index].x+1][mine[$index].y+1] == "undefined"?null:temp[mine[$index].x+1][mine[$index].y+1]
-          }else{
-            return null;
-          }
-        })()     
-        // temp[mine[$index].x-1]||typeof temp[mine[$index].x-1][mine[$index].y] == "undefined"?null:temp[mine[$index].x-1][mine[$index].y],
-        // temp[mine[$index].x-1]||typeof temp[mine[$index].x-1][mine[$index].y+1] == "undefined"?null:temp[mine[$index].x-1][mine[$index].y+1],
-        // temp[mine[$index].x]||typeof temp[mine[$index].x][mine[$index].y-1] == "undefined"?null:temp[mine[$index].x][mine[$index].y-1],
-        // temp[mine[$index].x]||typeof temp[mine[$index].x][mine[$index].y+1] == "undefined"?null:temp[mine[$index].x][mine[$index].y+1],
-        // temp[mine[$index].x+1]||typeof temp[mine[$index].x+1][mine[$index].y-1] == "undefined"?null:temp[mine[$index].x+1][mine[$index].y-1],
-        // temp[mine[$index].x+1]||typeof temp[mine[$index].x+1][mine[$index].y] == "undefined"?null:temp[mine[$index].x+1][mine[$index].y],
-        // temp[mine[$index].x+1]||typeof temp[mine[$index].x+1][mine[$index].y+1] == "undefined"?null:temp[mine[$index].x+1][mine[$index].y+1]
-      ];
-      temp[mine[$index].x][mine[$index].y] = -1;
-      for(let i = 0,len = arr.length;i<len;i++){
-        if(typeof arr[i]!="object"&&arr[i]!=-1){
-          arr[i]+=1;
+      let arr:object;
+      arr = {
+        1:{
+          message:typeof this.checkBoard[mine[$index].x-1] == "undefined"?null:typeof this.checkBoard[mine[$index].x-1][mine[$index].y-1] == "undefined"?null:this.checkBoard[mine[$index].x-1][mine[$index].y-1],
+          x:mine[$index].x-1,
+          y:mine[$index].y-1
+        },
+        2:{
+          message:typeof this.checkBoard[mine[$index].x-1] == "undefined"?null:typeof this.checkBoard[mine[$index].x-1][mine[$index].y] == "undefined"?null:this.checkBoard[mine[$index].x-1][mine[$index].y],
+          x:mine[$index].x-1,
+          y:mine[$index].y
+        },
+        3:{
+          message:typeof this.checkBoard[mine[$index].x-1] == "undefined"?null:typeof this.checkBoard[mine[$index].x-1][mine[$index].y+1] == "undefined"?null:this.checkBoard[mine[$index].x-1][mine[$index].y+1],
+          x:mine[$index].x-1,
+          y:mine[$index].y+1
+        },
+        4:{
+          message:typeof this.checkBoard[mine[$index].x] == "undefined"?null: typeof this.checkBoard[mine[$index].x][mine[$index].y-1] == "undefined"?null:this.checkBoard[mine[$index].x][mine[$index].y-1],
+          x:mine[$index].x,
+          y:mine[$index].y-1
+        },
+        5:{
+          message:typeof this.checkBoard[mine[$index].x] == "undefined"?null:typeof this.checkBoard[mine[$index].x][mine[$index].y+1] == "undefined"?null:this.checkBoard[mine[$index].x][mine[$index].y+1],
+          x:mine[$index].x,
+          y:mine[$index].y+1
+        },
+        6:{
+          message:typeof this.checkBoard[mine[$index].x+1] == "undefined"?null:typeof this.checkBoard[mine[$index].x+1][mine[$index].y-1] == "undefined"?null:this.checkBoard[mine[$index].x+1][mine[$index].y-1],
+          x:mine[$index].x+1,
+          y:mine[$index].y-1
+        },
+        7:{
+          message:typeof this.checkBoard[mine[$index].x+1] == "undefined"?null:typeof this.checkBoard[mine[$index].x+1][mine[$index].y] == "undefined"?null:this.checkBoard[mine[$index].x+1][mine[$index].y],
+          x:mine[$index].x+1,
+          y:mine[$index].y          
+        },
+        8:{
+          message:typeof this.checkBoard[mine[$index].x+1] == "undefined"?null:typeof this.checkBoard[mine[$index].x+1][mine[$index].y+1] == "undefined"?null:this.checkBoard[mine[$index].x+1][mine[$index].y+1],
+          x:mine[$index].x+1,
+          y:mine[$index].y+1          
+        }
+
+      };
+      this.checkBoard[mine[$index].x][mine[$index].y] = -1;
+      for(let $index in arr){
+        if(typeof arr[$index].message!="object"&&arr[$index].message!=-1){
+          this.checkBoard[arr[$index].x][arr[$index].y] +=1;
         }
       }
-      console.log(arr);
     }
-    return temp;
   }
 
   private createMine = (x:number,y:number,amount:number):object =>{
@@ -137,6 +108,3 @@ class Checkerboard{
     return temp;
   }
 }
-
-let test = new Checkerboard("ten");
-console.log(test.checkBoard);

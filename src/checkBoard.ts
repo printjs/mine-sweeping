@@ -7,12 +7,13 @@
  * forty 四十个雷 棋盘大小16X16
  * ninetyNine 九十九个雷 棋盘大小30X16
  */
+import {nineParty} from './config';
 export class Checkerboard{
-  public checkBoard:Array<Array<number>>;
+  public checkBoard:Array<Array<object>>;
   private initObj:object;
 
   constructor(type:string){ 
-    this.checkBoard = new Array<Array<number>>();
+    this.checkBoard = new Array<Array<object>>();
     this.initObj = {
       "ten":(x:number = 8,y:number = 8):void => {
         this.initCheckBoard(x,y,this.createMine(x,y,10));
@@ -29,60 +30,32 @@ export class Checkerboard{
 
   private initCheckBoard = (x:number,y:number,mine:object) =>{
     for(let i = 0;i<x;i++){
-      this.checkBoard[i] = new Array<number>();
+      this.checkBoard[i] = new Array<object>();
       for(let j = 0;j<y;j++){
-        this.checkBoard[i][j] = 0;
+        this.checkBoard[i][j] = {
+          locate:i+''+j,
+          x:i,
+          y:j,
+          message:0,
+          status:"unknow"
+        };
       }
     }
     for(let $index in mine){
-      let arr:object;
-      arr = {
-        1:{
-          message:typeof this.checkBoard[mine[$index].x-1] == "undefined"?null:typeof this.checkBoard[mine[$index].x-1][mine[$index].y-1] == "undefined"?null:this.checkBoard[mine[$index].x-1][mine[$index].y-1],
-          x:mine[$index].x-1,
-          y:mine[$index].y-1
-        },
-        2:{
-          message:typeof this.checkBoard[mine[$index].x-1] == "undefined"?null:typeof this.checkBoard[mine[$index].x-1][mine[$index].y] == "undefined"?null:this.checkBoard[mine[$index].x-1][mine[$index].y],
-          x:mine[$index].x-1,
-          y:mine[$index].y
-        },
-        3:{
-          message:typeof this.checkBoard[mine[$index].x-1] == "undefined"?null:typeof this.checkBoard[mine[$index].x-1][mine[$index].y+1] == "undefined"?null:this.checkBoard[mine[$index].x-1][mine[$index].y+1],
-          x:mine[$index].x-1,
-          y:mine[$index].y+1
-        },
-        4:{
-          message:typeof this.checkBoard[mine[$index].x] == "undefined"?null: typeof this.checkBoard[mine[$index].x][mine[$index].y-1] == "undefined"?null:this.checkBoard[mine[$index].x][mine[$index].y-1],
-          x:mine[$index].x,
-          y:mine[$index].y-1
-        },
-        5:{
-          message:typeof this.checkBoard[mine[$index].x] == "undefined"?null:typeof this.checkBoard[mine[$index].x][mine[$index].y+1] == "undefined"?null:this.checkBoard[mine[$index].x][mine[$index].y+1],
-          x:mine[$index].x,
-          y:mine[$index].y+1
-        },
-        6:{
-          message:typeof this.checkBoard[mine[$index].x+1] == "undefined"?null:typeof this.checkBoard[mine[$index].x+1][mine[$index].y-1] == "undefined"?null:this.checkBoard[mine[$index].x+1][mine[$index].y-1],
-          x:mine[$index].x+1,
-          y:mine[$index].y-1
-        },
-        7:{
-          message:typeof this.checkBoard[mine[$index].x+1] == "undefined"?null:typeof this.checkBoard[mine[$index].x+1][mine[$index].y] == "undefined"?null:this.checkBoard[mine[$index].x+1][mine[$index].y],
-          x:mine[$index].x+1,
-          y:mine[$index].y          
-        },
-        8:{
-          message:typeof this.checkBoard[mine[$index].x+1] == "undefined"?null:typeof this.checkBoard[mine[$index].x+1][mine[$index].y+1] == "undefined"?null:this.checkBoard[mine[$index].x+1][mine[$index].y+1],
-          x:mine[$index].x+1,
-          y:mine[$index].y+1          
-        }
+      let nineparty = new nineParty(mine[$index].x,mine[$index].y).config;
+      let arr:Array<object> = new Array<object>();
 
-      };
-      this.checkBoard[mine[$index].x][mine[$index].y] = -1;
-      for(let $index in arr){
-        if(typeof arr[$index].message!="object"&&arr[$index].message!=-1){
-          this.checkBoard[arr[$index].x][arr[$index].y] +=1;
+      for(let val of nineparty){
+        arr.push({
+          message:typeof this.checkBoard[val["x"]] == "undefined"?null:typeof this.checkBoard[val["x"]][val["y"]] == "undefined"?null:this.checkBoard[val["x"]][val["y"]]["message"],
+          x:val["x"],
+          y:val["y"]
+        })
+      }
+      this.checkBoard[mine[$index].x][mine[$index].y]["message"] = -1;
+      for(let val of arr){
+        if(typeof val["message"]!="object"&&val["message"]!=-1){
+          this.checkBoard[val["x"]][val["y"]]["message"] +=1;
         }
       }
     }

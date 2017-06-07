@@ -63,25 +63,16 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports) {
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(7)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 扫雷的棋盘
-     * author：wjt
-     * date:2017/6/6
-     * params @param{type}
-     * ten 十个雷 棋盘大小8X8
-     * forty 四十个雷 棋盘大小16X16
-     * ninetyNine 九十九个雷 棋盘大小30X16
-     */
     var Checkerboard = (function () {
         function Checkerboard(type) {
             var _this = this;
@@ -89,57 +80,31 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                 for (var i = 0; i < x; i++) {
                     _this.checkBoard[i] = new Array();
                     for (var j = 0; j < y; j++) {
-                        _this.checkBoard[i][j] = 0;
+                        _this.checkBoard[i][j] = {
+                            locate: i + '' + j,
+                            x: i,
+                            y: j,
+                            message: 0,
+                            status: "unknow"
+                        };
                     }
                 }
                 for (var $index in mine) {
-                    var arr = void 0;
-                    arr = {
-                        1: {
-                            message: typeof _this.checkBoard[mine[$index].x - 1] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x - 1][mine[$index].y - 1] == "undefined" ? null : _this.checkBoard[mine[$index].x - 1][mine[$index].y - 1],
-                            x: mine[$index].x - 1,
-                            y: mine[$index].y - 1
-                        },
-                        2: {
-                            message: typeof _this.checkBoard[mine[$index].x - 1] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x - 1][mine[$index].y] == "undefined" ? null : _this.checkBoard[mine[$index].x - 1][mine[$index].y],
-                            x: mine[$index].x - 1,
-                            y: mine[$index].y
-                        },
-                        3: {
-                            message: typeof _this.checkBoard[mine[$index].x - 1] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x - 1][mine[$index].y + 1] == "undefined" ? null : _this.checkBoard[mine[$index].x - 1][mine[$index].y + 1],
-                            x: mine[$index].x - 1,
-                            y: mine[$index].y + 1
-                        },
-                        4: {
-                            message: typeof _this.checkBoard[mine[$index].x] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x][mine[$index].y - 1] == "undefined" ? null : _this.checkBoard[mine[$index].x][mine[$index].y - 1],
-                            x: mine[$index].x,
-                            y: mine[$index].y - 1
-                        },
-                        5: {
-                            message: typeof _this.checkBoard[mine[$index].x] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x][mine[$index].y + 1] == "undefined" ? null : _this.checkBoard[mine[$index].x][mine[$index].y + 1],
-                            x: mine[$index].x,
-                            y: mine[$index].y + 1
-                        },
-                        6: {
-                            message: typeof _this.checkBoard[mine[$index].x + 1] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x + 1][mine[$index].y - 1] == "undefined" ? null : _this.checkBoard[mine[$index].x + 1][mine[$index].y - 1],
-                            x: mine[$index].x + 1,
-                            y: mine[$index].y - 1
-                        },
-                        7: {
-                            message: typeof _this.checkBoard[mine[$index].x + 1] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x + 1][mine[$index].y] == "undefined" ? null : _this.checkBoard[mine[$index].x + 1][mine[$index].y],
-                            x: mine[$index].x + 1,
-                            y: mine[$index].y
-                        },
-                        8: {
-                            message: typeof _this.checkBoard[mine[$index].x + 1] == "undefined" ? null : typeof _this.checkBoard[mine[$index].x + 1][mine[$index].y + 1] == "undefined" ? null : _this.checkBoard[mine[$index].x + 1][mine[$index].y + 1],
-                            x: mine[$index].x + 1,
-                            y: mine[$index].y + 1
-                        }
-                    };
-                    _this.checkBoard[mine[$index].x][mine[$index].y] = -1;
-                    for (var $index_1 in arr) {
-                        if (typeof arr[$index_1].message != "object" && arr[$index_1].message != -1) {
-                            _this.checkBoard[arr[$index_1].x][arr[$index_1].y] += 1;
+                    var nineparty = new config_1.nineParty(mine[$index].x, mine[$index].y).config;
+                    var arr = new Array();
+                    for (var _i = 0, nineparty_1 = nineparty; _i < nineparty_1.length; _i++) {
+                        var val = nineparty_1[_i];
+                        arr.push({
+                            message: typeof _this.checkBoard[val["x"]] == "undefined" ? null : typeof _this.checkBoard[val["x"]][val["y"]] == "undefined" ? null : _this.checkBoard[val["x"]][val["y"]]["message"],
+                            x: val["x"],
+                            y: val["y"]
+                        });
+                    }
+                    _this.checkBoard[mine[$index].x][mine[$index].y]["message"] = -1;
+                    for (var _a = 0, arr_1 = arr; _a < arr_1.length; _a++) {
+                        var val = arr_1[_a];
+                        if (typeof val["message"] != "object" && val["message"] != -1) {
+                            _this.checkBoard[val["x"]][val["y"]]["message"] += 1;
                         }
                     }
                 }
@@ -194,38 +159,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(0)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, checkBoard_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var style = __webpack_require__(2);
-    var mineClearance = (function () {
-        function mineClearance(type) {
-            this.mine = new checkBoard_1.Checkerboard(type).checkBoard;
-            this.renderMine();
-        }
-        mineClearance.prototype.renderMine = function () {
-            var root = document.getElementById('mineArea');
-            for (var i = 0, len = this.mine.length; i < len; i++) {
-                for (var j = 0, len_1 = this.mine[i].length; j < len_1; j++) {
-                    var div = document.createElement('div');
-                    div.setAttribute("data-val", this.mine[i][j] + "");
-                    div.setAttribute("class", "unknow");
-                    root.appendChild(div);
-                }
-            }
-        };
-        return mineClearance;
-    }());
-    new mineClearance("ninetyNine");
-}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-// console.log(test.mine); 
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
@@ -252,6 +185,105 @@ if(false) {
 	// When the module is disposed, remove the <style> tags
 	module.hot.dispose(function() { update(); });
 }
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(0), __webpack_require__(7)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, checkBoard_1, config_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var style = __webpack_require__(1);
+    var mineClearance = (function () {
+        function mineClearance(type) {
+            this.config = new Array();
+            this.mine = new checkBoard_1.Checkerboard(type).checkBoard;
+            this.renderMine();
+        }
+        /**
+         * this.mine 对象说明点
+         * note: @param locate  雷区的坐标
+         *       @param message 雷区的内容，是否有雷，和雷的数量
+         *       @param status  unknow 为未打开的雷区
+         *                      flag 为标记为雷的雷区
+         *                      open 为已经开发的雷区
+         *                      boom 触雷的状态，游戏结束
+         */
+        mineClearance.prototype.renderMine = function () {
+            var _this = this;
+            var root = document.getElementById('mineArea');
+            var _loop_1 = function (i, len) {
+                var _loop_2 = function (j, len_1) {
+                    var div = document.createElement('div');
+                    div.setAttribute("val", this_1.mine[i][j]["message"] + "");
+                    div.setAttribute("x", i + "");
+                    div.setAttribute("y", j + "");
+                    div.setAttribute("class", this_1.mine[i][j]["status"]);
+                    div.onclick = function () {
+                        if (!_this.leftClick(_this.mine[i][j])) {
+                            alert("游戏结束");
+                        }
+                    };
+                    root.appendChild(div);
+                };
+                for (var j = 0, len_1 = this_1.mine[i].length; j < len_1; j++) {
+                    _loop_2(j, len_1);
+                }
+            };
+            var this_1 = this;
+            for (var i = 0, len = this.mine.length; i < len; i++) {
+                _loop_1(i, len);
+            }
+        };
+        mineClearance.prototype.leftClick = function (obj) {
+            if (obj["message"] == -1) {
+                obj["status"] == "boom";
+                return false;
+            }
+            this.searchSafeArea(obj["x"], obj["y"]);
+            return true;
+        };
+        mineClearance.prototype.searchSafeArea = function (x, y) {
+            var nineparty = new config_1.nineParty(x, y).config;
+            for (var _i = 0, nineparty_1 = nineparty; _i < nineparty_1.length; _i++) {
+                var val = nineparty_1[_i];
+                var x_1 = val["x"];
+                var y_1 = val["y"];
+                if (typeof this.mine[x_1] == "undefined") {
+                    return;
+                }
+                if (typeof this.mine[x_1][y_1] == "undefined") {
+                    return;
+                }
+                if (this.mine[x_1][y_1]["status"] == "flag") {
+                    console.log("进入status 是flag的判断");
+                }
+                else if (this.mine[x_1][y_1]["status"] != "flag") {
+                    console.log("进入status 不是flag的判断");
+                    if (this.mine[x_1][y_1]["message"] == -1) {
+                        return;
+                    }
+                    if (this.mine[x_1][y_1]["message"] == 0) {
+                        this.mine[x_1][y_1]["status"] = "open";
+                        this.searchSafeArea(x_1, y_1);
+                    }
+                    if (this.mine[x_1][y_1]["message"] > 0) {
+                        this.mine[x_1][y_1]["status"] = "open";
+                        return;
+                    }
+                }
+                else {
+                    alert("程序发生异常");
+                }
+            }
+        };
+        return mineClearance;
+    }());
+    new mineClearance("ninetyNine");
+}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+// console.log(test.mine); 
+
 
 /***/ }),
 /* 3 */
@@ -801,6 +833,57 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var nineParty = (function () {
+        function nineParty(x, y) {
+            this.config = [
+                {
+                    x: x - 1,
+                    y: y - 1
+                },
+                {
+                    x: x - 1,
+                    y: y
+                },
+                {
+                    x: x - 1,
+                    y: y + 1
+                },
+                {
+                    x: x,
+                    y: y - 1
+                },
+                {
+                    x: x,
+                    y: y + 1
+                },
+                {
+                    x: x + 1,
+                    y: y - 1
+                },
+                {
+                    x: x + 1,
+                    y: y
+                },
+                {
+                    x: x + 1,
+                    y: y + 1
+                }
+            ];
+        }
+        return nineParty;
+    }());
+    exports.nineParty = nineParty;
+}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 
 /***/ })

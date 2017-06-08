@@ -15,23 +15,23 @@ export class Checkerboard{
   constructor(type:string){ 
     this.checkBoard = new Array<Array<object>>();
     this.initObj = {
-      "ten":(x:number = 8,y:number = 8):void => {
-        this.initCheckBoard(x,y,this.createMine(x,y,10));
+      "ten":(width:number = 8,height:number = 8):void => {
+        this.initCheckBoard(height,width,this.createMine(height,width,10));
       },
-      "forty":(x:number = 16,y:number = 16):void => {
-        this.initCheckBoard(x,y,this.createMine(x,y,40));
+      "forty":(width:number = 16,height:number = 16):void => {
+        this.initCheckBoard(height,width,this.createMine(height,width,40));
       },
-      "ninetyNine":(x:number = 30,y:number = 16):void => {
-        this.initCheckBoard(x,y,this.createMine(x,y,99));
+      "ninetyNine":(width:number = 30,height:number = 16):void => {
+        this.initCheckBoard(height,width,this.createMine(height,width,99));
       }
     }
     this.initObj[type]();
   }
 
-  private initCheckBoard = (x:number,y:number,mine:object) =>{
-    for(let i = 0;i<x;i++){
+  private initCheckBoard = (height:number,width:number,mine:object) =>{
+    for(let i = 0;i<height;i++){
       this.checkBoard[i] = new Array<object>();
-      for(let j = 0;j<y;j++){
+      for(let j = 0;j<width;j++){
         this.checkBoard[i][j] = {
           locate:i+''+j,
           x:i,
@@ -61,7 +61,7 @@ export class Checkerboard{
     }
   }
 
-  private createMine = (x:number,y:number,amount:number):object =>{
+  private createMine = (height:number,width:number,amount:number):object =>{
     let temp:object = new function(){};
     let condition:number = amount;
     let arr = Object.keys(temp);
@@ -69,8 +69,8 @@ export class Checkerboard{
     let m:number;
     let n:number;
     while(count < condition){
-      m = Math.floor(Math.random()*(x-1));
-      n = Math.floor(Math.random()*(y-1));
+      m = Math.floor(Math.random()*(height-1));
+      n = Math.floor(Math.random()*(width-1));
       temp[m+''+n] = {
         x:m,
         y:n

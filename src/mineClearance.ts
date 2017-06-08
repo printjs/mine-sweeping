@@ -1,14 +1,20 @@
-import {Checkerboard} from './checkBoard';
-import {nineParty} from './config';
-var style:any = require('./less/main');
+import {
+  Checkerboard
+} from './checkBoard';
+var style: any = require('./less/main');
+var iconfont: any = require('./css/iconfont.css');
 
 class mineClearance {
-  private mine:Array<Array<object>>;
-  private config:Array<object>;
-  constructor(type:string){
-    this.config = new Array<object>();
+  private mine: Array < Array < object >> ;
+  private waitDetection: Array < object > ;
+  private detected:Array < object >;
+  private keys: object;
+  constructor(type: string) {
     this.mine = new Checkerboard(type).checkBoard;
-    this.renderMine();
+    this.waitDetection = new Array < object > ();
+    this.detected = new Array < object > ();
+    this.keys = {};
+    this.initMine();
   }
   /**
    * this.mine 对象说明点
@@ -19,18 +25,27 @@ class mineClearance {
    *                      open 为已经开发的雷区
    *                      boom 触雷的状态，游戏结束
    */
-  private renderMine (){
+  private initMine() {
     let root = document.getElementById('mineArea');
-    for(let i = 0,len = this.mine.length;i<len;i++){
-      for(let j = 0,len = this.mine[i].length;j<len;j++){
+    root.style.cssText = "display:grid;grid-template-columns:repeat(" + this.mine[0].length + ",25px);grid-template-rows:repeat(" + this.mine.length + ",25px);grid-column-gap:4px;grid-row-gap:4px;"
+    for (let i = 0, len = this.mine.length; i < len; i++) {
+      for (let j = 0, len = this.mine[i].length; j < len; j++) {
         let div = document.createElement('div');
-        div.setAttribute("val",this.mine[i][j]["message"]+"");
-        div.setAttribute("x",i+"");
-        div.setAttribute("y",j+"");
-        div.setAttribute("class",this.mine[i][j]["status"]);
-        div.onclick = () =>{
-          if(!this.leftClick(this.mine[i][j])){
-            alert("游戏结束");
+        div.setAttribute("val", this.mine[i][j]["message"] + "");
+        div.setAttribute("x", i + "");
+        div.setAttribute("y", j + "");
+        div.classList.add(this.mine[i][j]["status"], "iconfont", "icon", "mine");
+        div.innerHTML = this.mine[i][j]["message"];
+        div.onmousedown = (event) => {
+          let mouse = event.button;
+          if (mouse == 2) {
+            console.log("鼠标右键");
+          } else if (mouse == 0) {
+            if (this.leftClick(this.mine[i][j], div)) {
+              this.drawMine();
+            } else {
+              alert("游戏结束");
+            }
           }
         }
         root.appendChild(div);
@@ -38,46 +53,119 @@ class mineClearance {
     }
   }
 
-  private leftClick(obj:object):boolean{
-    if(obj["message"] == -1){
+  private leftClick(obj: object, div: any): boolean {
+    let textInfo: string;
+    if (obj["message"] == -1) {
+      div.classList.remove('unknow', 'flag', 'open', 'boom');
+      div.classList.add("boom");
+      div.innerHTML = "&#xe610;";
       obj["status"] == "boom";
       return false;
     }
-    this.searchSafeArea(obj["x"],obj["y"]);
+    this.searchSafeArea(obj["x"], obj["y"]);
     return true;
   }
 
-  private searchSafeArea(x:number,y:number):any{
-    let nineparty:Array<object> = new nineParty(x,y).config;
-    for(let val of nineparty){
-      let x = val["x"];
-      let y = val["y"];
-      if(typeof this.mine[x]=="undefined"){
-        return;
-      }
-      if(typeof this.mine[x][y] == "undefined"){
-        return;
-      }
-      if(this.mine[x][y]["status"]=="flag"){
-        console.log("进入status 是flag的判断");
-      }else if(this.mine[x][y]["status"]!="flag"){
-        console.log("进入status 不是flag的判断");
-        if(this.mine[x][y]["message"]==-1){
-          return;
+  private createNineBox(x: number, y: number): Array < object > {
+    let temp: Array < object > = new Array < object > ();
+    for (let i = -1; i < 2; i++) {
+      for (let j = -1; j < 2; j++) {
+        if (x == x + i && y == y + j) {
+          continue;
         }
-        if(this.mine[x][y]["message"]==0){
-          this.mine[x][y]["status"] = "open"
-          this.searchSafeArea(x,y)
-        }
-        if(this.mine[x][y]["message"]>0){
-          this.mine[x][y]["status"] = "open"
-          return
-        }
-      }else{
-        alert("程序发生异常");
+        temp.push({
+          x: x + i,
+          y: y + j
+        })
       }
     }
+    return temp;
+  }
 
+  private searchSafeArea(x: number, y: number): any {
+    let newX: number;
+    let newY: number;
+    let temp: Array < object > = new Array < object > ();
+    let obj: object = {};
+
+    if (this.mine[x][y]["message"] > 0) {
+      this.mine[x][y]["status"] = "open";
+      return;
+    }
+    if (typeof this.mine[x] == "undefined") {
+      return;
+    }
+    if (typeof this.mine[x][y] == "undefined") {
+      return;
+    }
+    if (this.mine[x][y]["message"] == 0) {
+      this.waitDetection.push({
+        x: x,
+        y: y
+      })
+      this.keys[x + "" + y] = x + "" + y;
+      while (this.waitDetection.length > 0) {
+        obj = this.waitDetection.shift();
+        this.detected.push(obj);
+        this.mine[obj["x"]][obj["y"]]["status"] = "open";
+        temp = this.createNineBox(obj["x"], obj["y"]);
+        for (let val of temp) {
+          if (typeof this.mine[val["x"]] == "undefined") {
+            continue;
+          }
+          if (typeof this.mine[val["x"]][val["y"]] == "undefined") {
+            continue;
+          }
+          if (!this.keys[val["x"] + "" + val["y"]] && this.mine[val["x"]][val["y"]]["message"] == 0) {
+            this.waitDetection.push({
+              x: val["x"],
+              y: val["y"]
+            })
+            this.keys[val["x"] + "" + val["y"]] = val["x"] + "" + val["y"];
+          }
+        }
+      }
+    }
+    while(this.detected.length>0){
+      obj = this.detected.shift();
+      console.log(obj["x"],obj["y"]);
+      temp = this.createNineBox(obj["x"], obj["y"]);
+      for(let val of temp){
+        if (typeof this.mine[val["x"]] == "undefined") {
+          continue;
+        }
+        if (typeof this.mine[val["x"]][val["y"]] == "undefined") {
+          continue;
+        }   
+        if (this.mine[val["x"]][val["y"]]["message"] >= 0 && this.mine[val["x"]][val["x"]]["status"]!="open") {
+          this.mine[val["x"]][val["x"]]["status"] = "open";
+        }     
+      }
+    }
+  }
+
+  private drawMine() {
+    let allMine: any = document.getElementsByClassName('iconfont');
+    let x: number = this.mine.length;
+    let y: number = this.mine[0].length;
+    let i: number = 0;
+    let textInfo: string;
+    for (let row of this.mine) {
+      for (let col of row) {
+        if (!allMine[i].classList.contains(col["status"])) {
+          allMine[i].classList.remove('unknow', 'open', 'boom');
+          allMine[i].classList.add(col["status"]);
+          if (col["status"] == "open") {
+            textInfo = col["message"] == 0 ? "" : col["message"] == -1 ? "&#xe610;" : col["message"]
+            allMine[i].innerHTML = textInfo;
+          }
+        }
+        i++;
+      }
+    }
+    // for(let val of allMine){
+    //   if(val.)
+    // }
   }
 }
 

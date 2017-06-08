@@ -15,20 +15,18 @@ body {
 }
 
 .mineArea {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  display: flex;
-  height: 576px;
-  width: 624px;
-  justify-content: space-around;
-  flex-grow: 0;
-  flex-wrap:wrap;
   >.unknow {
-    height:25px;
-    width:25px;
-    background: @unknow;
+    background:@unknow;
+  }
+  >.mine{
+    border-radius:3px;
+    text-align:center;
+    line-height:25px;
+  }
+  >.open{
+    background:@open;
+  }
+  >.boom{
+    color:@boom;
   }
 }

@@ -1,21 +1,23 @@
 {
-    "name": "mine_clearance",
-    "version": "1.0.0",
-    "description": "mine_clearance_ts",
-    "main": "none",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "wjt",
-    "license": "ISC",
-    "devDependencies": {
-        "@types/node": "^7.0.28",
-        "awesome-typescript-loader": "^3.1.3",
-        "css-loader": "^0.28.4",
-        "less": "^2.7.2",
-        "less-loader": "^4.0.4",
-        "style-loader": "^0.18.2",
-        "typescript": "^2.3.4",
-        "webpack": "^2.6.1"
-    }
+  "name": "mine_clearance",
+  "version": "1.0.0",
+  "description": "mine_clearance_ts",
+  "main": "none",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wjt",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^7.0.28",
+    "awesome-typescript-loader": "^3.1.3",
+    "css-loader": "^0.28.4",
+    "file-loader": "^0.11.2",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.4",
+    "style-loader": "^0.18.2",
+    "typescript": "^2.3.4",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.6.1"
+  }
 }

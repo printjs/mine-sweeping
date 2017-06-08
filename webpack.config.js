@@ -35,6 +35,14 @@ module.exports = {
         loader: "awesome-typescript-loader",
       },
       {
+        test: /\.css$/,
+        use: [{
+          loader: "style-loader" // creates style nodes from JS strings
+        }, {
+          loader: "css-loader" // translates CSS into CommonJS
+        }]
+      },
+      {
         test: /\.less$/,
         use: [{
           loader: "style-loader" // creates style nodes from JS strings
@@ -42,6 +50,12 @@ module.exports = {
           loader: "css-loader" // translates CSS into CommonJS
         }, {
           loader: "less-loader" // compiles Less to CSS
+        }]
+      },
+      {
+        test: /\.(woff|svg|eot|ttf)\??.*$/,
+        use: [{
+          loader: "url-loader"
         }]
       }
     ],
@@ -59,7 +73,7 @@ module.exports = {
     ],
     // directories where to look for modules
 
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js",".less"],
+    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js",".less",".css"],
     // extensions that are used
 
     alias: {},

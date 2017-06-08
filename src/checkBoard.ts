@@ -7,7 +7,7 @@
  * forty 四十个雷 棋盘大小16X16
  * ninetyNine 九十九个雷 棋盘大小30X16
  */
-import {nineParty} from './config';
+import {createNineBox} from './config';
 export class Checkerboard{
   public checkBoard:Array<Array<object>>;
   private initObj:object;
@@ -15,13 +15,13 @@ export class Checkerboard{
   constructor(type:string){ 
     this.checkBoard = new Array<Array<object>>();
     this.initObj = {
-      "ten":(width:number = 8,height:number = 8):void => {
+      "primary":(width:number = 8,height:number = 8):void => {
         this.initCheckBoard(height,width,this.createMine(height,width,10));
       },
-      "forty":(width:number = 16,height:number = 16):void => {
+      "intermediate":(width:number = 16,height:number = 16):void => {
         this.initCheckBoard(height,width,this.createMine(height,width,40));
       },
-      "ninetyNine":(width:number = 30,height:number = 16):void => {
+      "senior":(width:number = 30,height:number = 16):void => {
         this.initCheckBoard(height,width,this.createMine(height,width,99));
       }
     }
@@ -42,7 +42,7 @@ export class Checkerboard{
       }
     }
     for(let $index in mine){
-      let nineparty = new nineParty(mine[$index].x,mine[$index].y).config;
+      let nineparty = new createNineBox(mine[$index].x,mine[$index].y).config;
       let arr:Array<object> = new Array<object>();
 
       for(let val of nineparty){

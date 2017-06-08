@@ -77,7 +77,7 @@ class mineClearance {
       div.innerHTML = "&#xe651;";
     }else if(div.classList.contains('flag')){
       div.classList.remove("flag");
-      //div.innerHTML = obj["message"];
+      div.innerHTML = "";
     }
     return true;
   }

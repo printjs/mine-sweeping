@@ -68,6 +68,50 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var createNineBox = (function () {
+        function createNineBox(x, y) {
+            this.config = new Array();
+            for (var i = -1; i < 2; i++) {
+                for (var j = -1; j < 2; j++) {
+                    if (x == x + i && y == y + j) {
+                        continue;
+                    }
+                    this.config.push({
+                        x: x + i,
+                        y: y + j
+                    });
+                }
+            }
+        }
+        return createNineBox;
+    }());
+    exports.createNineBox = createNineBox;
+    var mineConfig = (function () {
+        function mineConfig(level) {
+            this.level = level;
+            this.config = {
+                "primary": 10,
+                "intermediate": 40,
+                "senior": 99
+            };
+        }
+        mineConfig.prototype.getMineNum = function (level) {
+            return this.config[level];
+        };
+        return mineConfig;
+    }());
+    exports.mineConfig = mineConfig;
+}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 /*
@@ -149,7 +193,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -508,16 +552,16 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
 module.exports = "data:application/vnd.ms-fontobject;base64,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"
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(6)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, config_1) {
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(0)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Checkerboard = (function () {
@@ -603,7 +647,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -617,7 +661,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -634,7 +678,7 @@ if(false) {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -648,7 +692,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
+var update = __webpack_require__(2)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -665,58 +709,14 @@ if(false) {
 }
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var createNineBox = (function () {
-        function createNineBox(x, y) {
-            this.config = new Array();
-            for (var i = -1; i < 2; i++) {
-                for (var j = -1; j < 2; j++) {
-                    if (x == x + i && y == y + j) {
-                        continue;
-                    }
-                    this.config.push({
-                        x: x + i,
-                        y: y + j
-                    });
-                }
-            }
-        }
-        return createNineBox;
-    }());
-    exports.createNineBox = createNineBox;
-    var mineConfig = (function () {
-        function mineConfig(level) {
-            this.level = level;
-            this.config = {
-                "primary": 10,
-                "intermediate": 40,
-                "senior": 99
-            };
-        }
-        mineConfig.prototype.getMineNum = function (level) {
-            return this.config[level];
-        };
-        return mineConfig;
-    }());
-    exports.mineConfig = mineConfig;
-}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(3), __webpack_require__(6)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, checkBoard_1, config_1) {
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(4), __webpack_require__(0)], __WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, checkBoard_1, config_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var style = __webpack_require__(4);
-    var iconfont = __webpack_require__(5);
+    var style = __webpack_require__(5);
+    var iconfont = __webpack_require__(6);
     var mineClearance = (function () {
         function mineClearance(type) {
             this.level = type;
@@ -794,7 +794,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             }
             else if (div.classList.contains('flag')) {
                 div.classList.remove("flag");
-                //div.innerHTML = obj["message"];
+                div.innerHTML = "";
             }
             return true;
         };
@@ -927,7 +927,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
@@ -941,12 +941,12 @@ exports.push([module.i, "html,\nbody {\n  background: #e9e9e9;\n  display: flex;
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(1)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\r\n@font-face {font-family: \"iconfont\";\r\n  src: url(" + __webpack_require__(2) + "); /* IE9*/\r\n  src: url(" + __webpack_require__(2) + "#iefix) format('embedded-opentype'), \r\n  url(" + __webpack_require__(13) + ") format('woff'), \r\n  url(" + __webpack_require__(12) + ") format('truetype'), \r\n  url(" + __webpack_require__(11) + "#iconfont) format('svg'); /* iOS 4.1- */\r\n}\r\n\r\n.iconfont {\r\n  font-family:\"iconfont\" !important;\r\n  font-size:16px;\r\n  font-style:normal;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.icon-flag:before { content: \"\\E651\"; }\r\n\r\n.icon-leida:before { content: \"\\E610\"; }\r\n\r\n.icon-x:before { content: \"\\E600\"; }\r\n\r\n", ""]);
+exports.push([module.i, "\r\n@font-face {font-family: \"iconfont\";\r\n  src: url(" + __webpack_require__(3) + "); /* IE9*/\r\n  src: url(" + __webpack_require__(3) + "#iefix) format('embedded-opentype'), \r\n  url(" + __webpack_require__(13) + ") format('woff'), \r\n  url(" + __webpack_require__(12) + ") format('truetype'), \r\n  url(" + __webpack_require__(11) + "#iconfont) format('svg'); /* iOS 4.1- */\r\n}\r\n\r\n.iconfont {\r\n  font-family:\"iconfont\" !important;\r\n  font-size:16px;\r\n  font-style:normal;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.icon-flag:before { content: \"\\E651\"; }\r\n\r\n.icon-leida:before { content: \"\\E610\"; }\r\n\r\n.icon-x:before { content: \"\\E600\"; }\r\n\r\n", ""]);
 
 // exports
 

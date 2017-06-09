@@ -51,7 +51,7 @@ class mineClearance {
             if (this.leftClick(this.mine[i][j], div)) {
               this.drawMine();
             } else {
-              
+              alert("失败");
             }
           }
         }
@@ -166,7 +166,7 @@ class mineClearance {
       }
     }
     success = document.getElementsByClassName('unknow').length;
-    if(success == new mineConfig(this.level).getMineNum(this.level)){
+    if(success == new mineConfig(this.level).getMineNum()){
       let successDom = document.getElementsByClassName('unknow');
       for(let i = 0,len = successDom.length;i<len;i++){
         successDom[i].classList.add("boom");

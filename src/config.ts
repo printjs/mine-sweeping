@@ -28,7 +28,7 @@ export class mineConfig{
     }
   }
 
-  public getMineNum(level:string){
-    return this.config[level];
+  public getMineNum(){
+    return this.config[this.level];
   }
 }

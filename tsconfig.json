@@ -7,7 +7,7 @@
         //"outDir": "./src/js_dist/",
         "outFile": "./dist/tsc.js",
         "watch": true,
-        "experimentalDecorators": true,
+        // "experimentalDecorators": true,
         "sourceMap": true
     },
     "include": [

@@ -1,7 +1,7 @@
 import {Checkerboard} from './checkBoard';
 import {createNineBox,mineConfig} from './config';
-var style: any = require('./less/main');
-var iconfont: any = require('./css/iconfont.css');
+let style: any = require('./less/main');
+let iconfont: any = require('./css/iconfont.css');
 
 class mineClearance {
   private mine: Array < Array < object >> ;
@@ -41,7 +41,7 @@ class mineClearance {
         div.setAttribute("y", j + "");
         div.classList.add(this.mine[i][j]["status"], "iconfont", "icon", "mine");
         //div.innerHTML = this.mine[i][j]["message"];
-        div.onmousedown = (event) => {
+        div.addEventListener('mousedown',(event) => {
           let mouse = event.button;
           if (mouse == 2) {
             if(this.rightClick(this.mine[i][j],div)){
@@ -54,29 +54,69 @@ class mineClearance {
               alert("失败");
             }
           }
-        }
+        });
+
+        div.addEventListener('dblclick',()=>{
+          if(!this.dbclick(this.mine[i][j],div)){
+            alert("失败");
+          }
+        });
         root.appendChild(div);
       }
     }
   }
 
-  private leftClick(obj: object, div: any): boolean {
+  private dbclick(obj:object,div:Element):boolean {
+    let temp = new createNineBox(obj["x"], obj["y"]).nineBox;
+    for(let val of temp){
+      if(typeof this.mine[val["x"]] == "undefined"){
+        continue;
+      }
+      if(typeof this.mine[val["x"]][val["y"]] == "undefined"){
+        continue;
+      }
+      if(this.mine[val["x"]][val["y"]]["tag"] == "flag"){
+        for(let val of temp){
+          if(typeof this.mine[val["x"]] == "undefined"){
+            continue;
+          }
+          if(typeof this.mine[val["x"]][val["y"]] == "undefined"){
+            continue;
+          }
+          if(this.mine[val["x"]][val["y"]]["message"] == -1&&this.mine[val["x"]][val["y"]]["tag"]!="flag"){
+            this.mine[val["x"]][val["y"]]["status"] = "boom";
+            this.fail();
+            return false;
+          }else if(this.mine[val["x"]][val["y"]]["message"] >= 0){
+            this.mine[val["x"]][val["y"]]["status"] = "open";
+          }
+        }
+        this.drawMine();
+        break;
+      }
+    }
+    return true;
+  }
+
+  private leftClick(obj: object, div: Element): boolean {
     let textInfo: string;
     if (obj["message"] == -1) {
-      this.fail(obj,div);
+      this.fail([div]);
       return false;
     }
     this.searchSafeArea(obj["x"], obj["y"]);
     return true;
   }
 
-  private rightClick(obj:object,div:any):boolean{
+  private rightClick(obj:object,div:Element):boolean{
     if(!div.classList.contains('flag')&&div.classList.contains('unknow')){
       div.classList.remove('unknow', 'flag', 'open', 'boom');
       div.classList.add("flag");
+      obj["tag"] = "flag";
       div.innerHTML = "&#xe651;";
     }else if(div.classList.contains('flag')){
       div.classList.remove("flag");
+      obj["tag"] = "";
       div.innerHTML = "";
     }
     return true;
@@ -108,7 +148,7 @@ class mineClearance {
         obj = this.waitDetection.shift();
         this.detected.push(obj);
         this.mine[obj["x"]][obj["y"]]["status"] = "open";
-        temp = new createNineBox(obj["x"], obj["y"]).config;
+        temp = new createNineBox(obj["x"], obj["y"]).nineBox;
         for (let val of temp) {
           if (typeof this.mine[val["x"]] == "undefined") {
             continue;
@@ -129,7 +169,7 @@ class mineClearance {
     while(this.detected.length>0){
       obj = this.detected.shift();
       console.log(obj["x"],obj["y"]);
-      temp = new createNineBox(obj["x"], obj["y"]).config;
+      temp = new createNineBox(obj["x"], obj["y"]).nineBox;
       for(let val of temp){
         if (typeof this.mine[val["x"]] == "undefined") {
           continue;
@@ -175,7 +215,7 @@ class mineClearance {
       alert("胜利");
     }
   }
-  private fail(obj: object, div: any){
+  private fail(div?: Array<Element>):any{
     let allMine: any = document.getElementsByClassName('iconfont');
     let i: number = 0;
     for (let row of this.mine) {
@@ -186,15 +226,19 @@ class mineClearance {
         i++;
       }
     }
-    div.classList.remove('unknow', 'flag', 'open', 'boom');
-    div.classList.add("boom");
-    div.innerHTML = "&#xe610;";
-    obj["status"] == "boom";
+    if(!div){
+      return;
+    }
+    for (let val of div){
+      val.classList.remove('unknow', 'flag', 'open', 'boom');
+      val.classList.add("boom");
+      val.innerHTML = "&#xe610;";
+    }
   }
 }
 /**
- *       "primary":10,
-      "intermediate":40,
-      "senior":99
+ * "primary":10,
+ * "intermediate":40,
+ * "senior":99
  */
-new mineClearance("senior");
+new mineClearance("primary");

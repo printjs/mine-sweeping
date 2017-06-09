@@ -7,25 +7,24 @@
  * forty 四十个雷 棋盘大小16X16
  * ninetyNine 九十九个雷 棋盘大小30X16
  */
-import {createNineBox} from './config';
+import {createNineBox,mineConfig} from './config';
 export class Checkerboard{
   public checkBoard:Array<Array<object>>;
+  public mineConf:mineConfig;
   private initObj:object;
 
   constructor(type:string){ 
     this.checkBoard = new Array<Array<object>>();
-    this.initObj = {
-      "primary":(width:number = 8,height:number = 8):void => {
-        this.initCheckBoard(height,width,this.createMine(height,width,10));
-      },
-      "intermediate":(width:number = 16,height:number = 16):void => {
-        this.initCheckBoard(height,width,this.createMine(height,width,40));
-      },
-      "senior":(width:number = 30,height:number = 16):void => {
-        this.initCheckBoard(height,width,this.createMine(height,width,99));
-      }
-    }
-    this.initObj[type]();
+    this.mineConf = new mineConfig(type);
+    this.initCheckBoard(
+      this.mineConf.getMineStrandard().height,
+      this.mineConf.getMineStrandard().width,
+      this.createMine(
+        this.mineConf.getMineStrandard().height,
+        this.mineConf.getMineStrandard().width,
+        this.mineConf.getMineNum()
+      )
+    );
   }
 
   private initCheckBoard = (height:number,width:number,mine:object) =>{
@@ -37,12 +36,13 @@ export class Checkerboard{
           x:i,
           y:j,
           message:0,
-          status:"unknow"
+          status:"unknow",
+          tag:""
         };
       }
     }
     for(let $index in mine){
-      let nineparty = new createNineBox(mine[$index].x,mine[$index].y).config;
+      let nineparty:Array<object> = new createNineBox(mine[$index].x,mine[$index].y).nineBox;
       let arr:Array<object> = new Array<object>();
 
       for(let val of nineparty){

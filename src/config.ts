@@ -1,13 +1,13 @@
 export class createNineBox {
-  public config: Array < object > ;
+  public nineBox: Array < object > ;
   constructor(x: number, y: number) {
-    this.config = new Array < object > ();
+    this.nineBox = new Array < object > ();
     for (let i = -1; i < 2; i++) {
       for (let j = -1; j < 2; j++) {
         if (x == x + i && y == y + j) {
           continue;
         }
-        this.config.push({
+        this.nineBox.push({
           x: x + i,
           y: y + j
         })
@@ -19,6 +19,7 @@ export class createNineBox {
 export class mineConfig{
   public level:string;
   public config:object;
+  public standard:object;
   constructor(level:string){
     this.level = level;
     this.config = {
@@ -26,9 +27,27 @@ export class mineConfig{
       "intermediate":40,
       "senior":99
     }
+    this.standard = {
+      "primary":{
+        "height":8,
+        "width":8
+      },
+      "intermediate":{
+        "height":16,
+        "width":16
+      },
+      "senior":{
+        "height":16,
+        "width":30
+      }      
+    }
   }
 
   public getMineNum(){
     return this.config[this.level];
+  }
+
+  public getMineStrandard(){
+    return this.standard[this.level];
   }
 }
